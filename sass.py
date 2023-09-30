@@ -129,6 +129,49 @@ htmlindex = [
     '\t</html>'
 ]
 
+sass_architecture = {
+    { "abstracts",
+        { "_variables.scss", True },
+        { "_functions.scss", False },
+        { "_mixins.scss", True },
+        { "_placeholders.scss", False }
+    },
+    { "base",
+        { "_reset.scss", True },
+        { "_typography.scss", True }
+    },
+    { "components",
+        { "_buttons.scss", True },
+        { "_carousel.scss", False },
+        { "_cover.scss", False },
+        { "_dropdown.scss", False }
+    },
+    { "layout",
+        { "_navigation.scss", True },
+        { "_grid.scss", True },
+        { "_header.scss", True },
+        { "_footer.scss", True },
+        { "_sidebar.scss", True },
+        { "_forms.scss", True }        
+    },
+    { "pages",
+        { "_home.scss", False },
+        { "_contact.scss", False },
+        { "_admin.scss", False },
+        { "_news.scss", False },
+        { "_search.scss", False }      
+    },
+    { "themes",
+        { "_light.scss", False },
+        { "_dark.scss", False },
+        { "_admin.scss", False }     
+    },    
+    { "vendors",
+        { "_bootstrap.scss", False },
+        { "_jquery-ui.scss", False }  
+    } 
+}
+
 def main():
     '''
     Settings for CLI parser
