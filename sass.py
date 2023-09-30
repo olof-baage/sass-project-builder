@@ -2,6 +2,7 @@ import sys
 import os
 import re
 import argparse
+import subprocess
 
 class Project:
     def __init___(self):
@@ -51,11 +52,51 @@ class Project:
         os.mkdir(self.project_name)
         os.chdir(self.project_name + "/")
         for folder in main_folders:
-            os.mkdir(folder + "/")        
+            os.mkdir(folder + "/")
+
+    def write_package_json(self):
+        with open("package.json", "a") as file:
+            for entry in package_json:
+                file.write(f"{entry}\n")
+
+    
+    def install_depencies(self):
+        subprocess.check_call('npm install', shell=True)
             
 
 achitecture_options = ["easy", "advanced", "expert"]
 main_folders = ["src", "public", "build"]
+package_json = [
+     '{',
+     '\t"name": "project",',
+     '\t"version": "0.1.0",',
+     '\t"description": "created by Sass Project Builder",',
+     '\t"main": "public/index.html",',
+     '\t"author": "code-by-olof",',
+     '\t"scripts": {',
+     '\t\t"build:sass": "sass  --no-source-map src/sass:public/css",',
+     '\t\t"copy:html": "copyfiles -u 1 ./src/*.html public",',
+     '\t\t"copy": "npm-run-all --parallel copy:*",',
+     '\t\t"watch:html": "onchange \'src/*.html\' -- npm run copy:html",',
+     '\t\t"watch:sass": "sass  --no-source-map --watch src/sass:public/css",',
+     '\t\t"watch": "npm-run-all --parallel watch:*",',
+     '\t\t"serve": "browser-sync start --server public --files public",',
+     '\t\t"start": "npm-run-all copy --parallel watch serve",',
+     '\t\t"build": "npm-run-all copy:html build:*",',
+     '\t\t"postbuild": "postcss public/css/*.css -u autoprefixer cssnano -r --no-map"',
+     '\t},',
+     '\t"dependencies": {',
+     '\t\t"autoprefixer": "^10.4.16",',
+     '\t\t"browser-sync": "^2.29.3",',
+     '\t\t"copyfiles": "^2.4.1",',
+     '\t\t"cssnano": "^6.0.1",',
+     '\t\t"npm-run-all": "^4.1.5",',
+     '\t\t"onchange": "^7.1.0",',
+     '\t\t"postcss-cli": "^10.1.0",',
+     '\t\t"sass": "^1.68.0"',
+     '\t}',
+     '}'
+]
 
 def main():
     '''
@@ -77,6 +118,8 @@ def main():
         if validate_projectname(args.project):
             sassproject.save_settings(args.project, args.pattern, args.dir)
             sassproject.create_main_project_folders()
+            sassproject.write_package_json()
+            sassproject.install_depencies()
 
 
 def validate_projectname(projectname):
