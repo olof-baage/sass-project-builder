@@ -41,10 +41,21 @@ class Project:
             if validate_path(dir):
                 self._project_dir = dir
             else:
-                sys.exit("\n😱 Directory does not exist or can't be created.\nIf you want to create your project in a subfolder or in a folder outside of this, make sure, to provide a valid name.\nA folder name should only contain the chars A-Z, a-z, 0-9 and ._- and has to end with /.\ne.g. -dir ../afolder/asubfolder/ OR just-a-subfolder/\n")              
+                sys.exit("\n😱 Directory does not exist or can't be created.\nIf you want to create your project in a subfolder or in a folder outside of this, make sure, to provide a valid name.\nA folder name should only contain the chars A-Z, a-z, 0-9 and ._- and has to end with /.\ne.g. -dir ../afolder/asubfolder/ OR just-a-subfolder/\n")
+        else:
+             self._project_dir = "./"    
+
+
+    def create_main_project_folders(self):
+        os.chdir(self.project_dir)
+        os.mkdir(self.project_name)
+        os.chdir(self.project_name + "/")
+        for folder in main_folders:
+            os.mkdir(folder + "/")        
             
 
 achitecture_options = ["easy", "advanced", "expert"]
+main_folders = ["src", "public", "build"]
 
 def main():
     '''
@@ -65,6 +76,7 @@ def main():
     if args.project != None and args.pattern != None:
         if validate_projectname(args.project):
             sassproject.save_settings(args.project, args.pattern, args.dir)
+            sassproject.create_main_project_folders()
 
 
 def validate_projectname(projectname):
