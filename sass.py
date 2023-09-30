@@ -50,18 +50,33 @@ class Project:
     def create_main_project_folders(self):
         os.chdir(self.project_dir)
         os.mkdir(self.project_name)
-        os.chdir(self.project_name + "/")
+        os.chdir(self.project_name + "/")        
         for folder in main_folders:
             os.mkdir(folder + "/")
+        os.mkdir("src/sass/")
+        fscss = open("src/sass/style.scss", "w")
+        fscss.close()
+        with open("src/index.html", "a") as file:
+            for entry in htmlindex:
+                file.write(f"{entry}\n")
+        print("🤩 main folders successfully created.\n")
 
     def write_package_json(self):
-        with open("package.json", "a") as file:
+        with open("./package.json", "a") as file:
             for entry in package_json:
                 file.write(f"{entry}\n")
+        print("🤩 package.json successfully created.\n")
 
     
     def install_depencies(self):
         subprocess.check_call('npm install', shell=True)
+
+
+    def build_advanced_project_architecture(self):
+        ...
+
+    def build_expert_project_architecture(self):
+        ...
             
 
 achitecture_options = ["easy", "advanced", "expert"]
@@ -74,11 +89,11 @@ package_json = [
      '\t"main": "public/index.html",',
      '\t"author": "code-by-olof",',
      '\t"scripts": {',
-     '\t\t"build:sass": "sass  --no-source-map src/sass:public/css",',
+     '\t\t"build:sass": "sass  --no-source-map src/sass:public/",',
      '\t\t"copy:html": "copyfiles -u 1 ./src/*.html public",',
      '\t\t"copy": "npm-run-all --parallel copy:*",',
      '\t\t"watch:html": "onchange \'src/*.html\' -- npm run copy:html",',
-     '\t\t"watch:sass": "sass  --no-source-map --watch src/sass:public/css",',
+     '\t\t"watch:sass": "sass  --no-source-map --watch src/sass:public/",',
      '\t\t"watch": "npm-run-all --parallel watch:*",',
      '\t\t"serve": "browser-sync start --server public --files public",',
      '\t\t"start": "npm-run-all copy --parallel watch serve",',
@@ -96,6 +111,22 @@ package_json = [
      '\t\t"sass": "^1.68.0"',
      '\t}',
      '}'
+]
+
+htmlindex = [
+    '<!DOCTYPE html>',
+    '<html lang="en">',
+    '<head>',
+    '\t<meta charset="UTF-8">',
+    '\t<meta name="viewport" content="width=device-width, initial-scale=1.0">',
+    '\t<title>made by Sass Project Builder 😇 </title>',
+    '\t<link rel="stylesheet" href="style.css">',
+    '</head>',
+    '<body>',
+    '\t<h1>Hej från Olof 👋</h1>',
+    '\t<p>Vad kul att du använder Sass Project Builder! 🤩</p>'
+    '\t</body>'
+    '\t</html>'
 ]
 
 def main():
