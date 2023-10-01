@@ -48,6 +48,8 @@ class Project:
 
 
     def create_main_project_folders(self):
+        if self.project_dir != './':
+            os.mkdir(self.project_dir)
         os.chdir(self.project_dir)
         try:
             os.mkdir(self.project_name)
@@ -90,7 +92,7 @@ class Project:
                 files = folder['files']
                 for single_file in files:
                     with open("src/sass/style.scss", "a") as scss:
-                        scss.write("@use '../" + folder['folder'] + "/" + single_file[0] + "';\n")
+                        scss.write("@use '" + folder['folder'] + "/" + single_file[0] + "';\n")
                 with open("src/sass/style.scss", "a") as scss:
                     scss.write("\n")                          
 
@@ -162,58 +164,58 @@ sass_architecture = [
     { 
         "folder": "abstracts",
         "files" : [
-            [ "_variables.scss", True, True, "var" ],
-            [ "_functions.scss", False, True, "func" ],
-            [ "_mixins.scss", True, True, "mix" ],
-            [ "_placeholders.scss", False, True, "plc" ]            
+            [ "variables", True, True, "var" ],
+            [ "functions", False, True, "func" ],
+            [ "mixins", True, True, "mix" ],
+            [ "placeholders", False, True, "plc" ]            
         ] 
     },
     { 
         "folder": "base",
         "files" : [
-            [ "_reset.scss", True, True ],
-            [ "_typography.scss", True, False ]         
+            [ "reset", True, False ],
+            [ "typography", True, False ]         
         ] 
     },
     { 
         "folder": "components",
         "files" : [
-            [ "_buttons.scss", True, False ],
-            [ "_carousel.scss", False, False ],
-            [ "_cover.scss", False, False ],
-            [ "_dropdown.scss", False, False ]          
+            [ "buttons", True, False ],
+            [ "carousel", False, False ],
+            [ "cover", False, False ],
+            [ "dropdown", False, False ]          
         ] 
     },
     { 
         "folder": "layout",
         "files" : [
-            [ "_navigation.scss", True, False ],
-            [ "_grid.scss", True, False ],
-            [ "_header.scss", True, False ],
-            [ "_footer.scss", True, False ],
-            [ "_sidebar.scss", True, False ],
-            [ "_forms.scss", True, False ]          
+            [ "navigation", True, False ],
+            [ "grid", True, False ],
+            [ "header", True, False ],
+            [ "footer", True, False ],
+            [ "sidebar", True, False ],
+            [ "forms", True, False ]          
         ] 
     },
     { 
         "folder": "pages",
         "files" : [
-            [ "_home.scss", False, False],
-            [ "_contact.scss", False, False ]         
+            [ "home", False, False],
+            [ "contact", False, False ]         
         ] 
     },
     { 
         "folder": "themes",
         "files" : [
-            [ "_theme.scss", False, False ],
-            [ "_admin.scss", False, False ]         
+            [ "theme", False, False ],
+            [ "admin", False, False ]         
         ] 
     },
     { 
         "folder": "vendors",
         "files" : [
-            [ "_bootstrap.scss", False, False ],
-            [ "_jquery-ui.scss", False, False ]         
+            [ "bootstrap", False, False ],
+            [ "jquery-ui", False, False ]         
         ] 
     }    
 ]
@@ -239,7 +241,7 @@ def main():
             sassproject.save_settings(args.project, args.pattern, args.dir)
             sassproject.create_main_project_folders()
             sassproject.write_package_json()
-            #sassproject.install_depencies()
+            sassproject.install_depencies()
             sassproject.build_sass_architecture()
             sassproject.imports_in_main_scsss_files()
 
@@ -268,15 +270,17 @@ def has_folder_true_files(files):
     return False   
 
 
-def write_file_dependencies(file):
+def write_file_dependencies(file, openFile):
     for folder in sass_architecture:
         all_files = folder['files']
         for single_file in all_files:
             if single_file[2]:
-                if len(single_file) == 4:                                  
-                    file.write("@use '../" + folder['folder'] + "/" + single_file[0] +"' as " + single_file[3] + ";\n") 
+                if len(single_file) == 4:  
+                    if openFile != single_file[0] and single_file[1]:
+                        file.write("@use '../" + folder['folder'] + "/" + single_file[0] +"' as " + single_file[3] + ";\n") 
                 else:
-                    file.write("@use '../" + folder['folder'] + "/" + single_file[0] + "';\n")             
+                    if openFile != single_file[0]:
+                        file.write("@use '../" + folder['folder'] + "/" + single_file[0] + "';\n")             
 
 
 def write_folders(files, item, pattern):
@@ -284,12 +288,12 @@ def write_folders(files, item, pattern):
     for file in files:
         if pattern == "advanced":
             if file[1]:
-                fscss = open("src/sass/" + item['folder'] + "/" + file[0], "w")
-                write_file_dependencies(fscss)
+                fscss = open("src/sass/" + item['folder'] + "/_" + file[0] + ".scss", "w")
+                write_file_dependencies(fscss, file[0])
                 fscss.close()
         elif pattern == "expert": 
-            fscss = open("src/sass/" + item['folder'] + "/" + file[0], "w")
-            write_file_dependencies(fscss)
+            fscss = open("src/sass/" + item['folder'] + "/_" + file[0] + ".scss", "w")
+            write_file_dependencies(fscss, file[0])
             fscss.close()            
 
 
