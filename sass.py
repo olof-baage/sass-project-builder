@@ -72,12 +72,16 @@ class Project:
         subprocess.check_call('npm install', shell=True)
 
 
-    def build_advanced_project_architecture(self):
-        ...
+    def build_advanced_sass_architecture(self):
+        for item in sass_architecture:       
+            files = item['files'] 
+            if has_folder_files(files):
+                os.mkdir("src/sass/" + item['folder'] + "/")     
+                for file in files:
+                    if(file[1]):
+                        fscss = open("src/sass/" + item['folder'] + "/" + file[0], "w")   
+                        fscss.close()  
 
-    def build_expert_project_architecture(self):
-        ...
-            
 
 achitecture_options = ["easy", "advanced", "expert"]
 main_folders = ["src", "public", "build"]
@@ -129,48 +133,65 @@ htmlindex = [
     '\t</html>'
 ]
 
-sass_architecture = {
-    { "abstracts",
-        { "_variables.scss", True },
-        { "_functions.scss", False },
-        { "_mixins.scss", True },
-        { "_placeholders.scss", False }
+sass_architecture = [ 
+    { 
+        "folder": "abstracts",
+        "files" : [
+            [ "_variables.scss", True ],
+            [ "_functions.scss", False ],
+            [ "_mixins.scss", True ],
+            [ "_placeholders.scss", False ]            
+        ] 
     },
-    { "base",
-        { "_reset.scss", True },
-        { "_typography.scss", True }
+    { 
+        "folder": "base",
+        "files" : [
+            [ "_reset.scss", True ],
+            [ "_typography.scss", True ]         
+        ] 
     },
-    { "components",
-        { "_buttons.scss", True },
-        { "_carousel.scss", False },
-        { "_cover.scss", False },
-        { "_dropdown.scss", False }
+    { 
+        "folder": "components",
+        "files" : [
+            [ "_buttons.scss", True ],
+            [ "_carousel.scss", False ],
+            [ "_cover.scss", False ],
+            [ "_dropdown.scss", False ]          
+        ] 
     },
-    { "layout",
-        { "_navigation.scss", True },
-        { "_grid.scss", True },
-        { "_header.scss", True },
-        { "_footer.scss", True },
-        { "_sidebar.scss", True },
-        { "_forms.scss", True }        
+    { 
+        "folder": "layout",
+        "files" : [
+            [ "_navigation.scss", True ],
+            [ "_grid.scss", True ],
+            [ "_header.scss", True ],
+            [ "_footer.scss", True ],
+            [ "_sidebar.scss", True ],
+            [ "_forms.scss", True ]          
+        ] 
     },
-    { "pages",
-        { "_home.scss", False },
-        { "_contact.scss", False },
-        { "_admin.scss", False },
-        { "_news.scss", False },
-        { "_search.scss", False }      
+    { 
+        "folder": "layout",
+        "files" : [
+            [ "_home.scss", False ],
+            [ "_contact.scss", False ]         
+        ] 
     },
-    { "themes",
-        { "_light.scss", False },
-        { "_dark.scss", False },
-        { "_admin.scss", False }     
-    },    
-    { "vendors",
-        { "_bootstrap.scss", False },
-        { "_jquery-ui.scss", False }  
-    } 
-}
+    { 
+        "folder": "themes",
+        "files" : [
+            [ "_theme.scss", False ],
+            [ "_admin.scss", False ]         
+        ] 
+    },
+    { 
+        "folder": "vendors",
+        "files" : [
+            [ "_bootstrap.scss", False ],
+            [ "_jquery-ui.scss", False ]         
+        ] 
+    }    
+]
 
 def main():
     '''
@@ -194,6 +215,7 @@ def main():
             sassproject.create_main_project_folders()
             sassproject.write_package_json()
             sassproject.install_depencies()
+            sassproject.build_advanced_sass_architecture()
 
 
 def validate_projectname(projectname):
@@ -207,6 +229,16 @@ def validate_path(path):
 			os.mkdir("./" + path)
 		return True
 	return False
+
+
+def has_folder_files(files):
+    count = 0
+    for file in files:
+        if(file[1]):
+            count += 1
+    if count >= 1:
+        return True
+    return False 
 
 
 if __name__ == "__main__":
