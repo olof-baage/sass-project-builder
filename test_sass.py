@@ -1,4 +1,4 @@
-from sass_builder import validate_projectname, validate_path
+from sass_builder import validate_projectname, validate_path, has_folder_true_files
 import pytest
 import os
 
@@ -21,6 +21,26 @@ def test_validate_path():
     assert validate_path(".././subfolder/") == False
     assert validate_path("././subfolder/") == False
     assert validate_path("././subfolder&something/") == False
+    assert validate_path("sub_folder/") == True
+    assert validate_path("sub-folder/") == True
+    assert validate_path("sub.folder/") == True
+
+
+
+def test_has_folder_true_files():
+    arr_pages =  [
+            [ "_home.scss", False, False],
+            [ "_contact.scss", False, False ] 
+    ]
+    arr_abstracts =  [
+            [ "_variables.scss", True, True, "var" ],
+            [ "_functions.scss", False, True, "func" ],
+            [ "_mixins.scss", True, True, "mix" ],
+            [ "_placeholders.scss", False, True, "plc" ] 
+    ]    
+    assert has_folder_true_files(arr_pages) == False
+    assert has_folder_true_files(arr_abstracts) == True
+
     
 
     

@@ -78,7 +78,7 @@ class Project:
         for item in sass_architecture:       
             files = item['files'] 
             if self.project_type == "advanced":
-                if has_folder_files(files):
+                if has_folder_true_files(files):
                     write_folders(files, item, self.project_type)
             if self.project_type == "expert":
                 write_folders(files, item, self.project_type)   
@@ -245,7 +245,7 @@ def validate_path(path):
         return False
 
 
-def has_folder_files(files):
+def has_folder_true_files(files):
     count = 0
     for file in files:
         if(file[1]):
