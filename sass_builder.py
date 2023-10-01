@@ -81,7 +81,19 @@ class Project:
                 if has_folder_true_files(files):
                     write_folders(files, item, self.project_type)
             if self.project_type == "expert":
-                write_folders(files, item, self.project_type)   
+                write_folders(files, item, self.project_type) 
+
+
+    def imports_in_main_scsss_files(self):
+        if self.project_type != "easy":
+            for folder in sass_architecture:
+                files = folder['files']
+                for single_file in files:
+                    with open("src/sass/style.scss", "a") as scss:
+                        scss.write("@use '../" + folder['folder'] + "/" + single_file[0] + "';\n")
+                with open("src/sass/style.scss", "a") as scss:
+                    scss.write("\n")                          
+
 
 
 achitecture_options = ["easy", "advanced", "expert"]
@@ -229,6 +241,7 @@ def main():
             sassproject.write_package_json()
             #sassproject.install_depencies()
             sassproject.build_sass_architecture()
+            sassproject.imports_in_main_scsss_files()
 
 
 def validate_projectname(projectname):
@@ -263,7 +276,7 @@ def write_file_dependencies(file):
                 if len(single_file) == 4:                                  
                     file.write("@use '../" + folder['folder'] + "/" + single_file[0] +"' as " + single_file[3] + ";\n") 
                 else:
-                    file.write("@use '../" + folder['folder'] + "/" + single_file[0] + ";\n") 
+                    file.write("@use '../" + folder['folder'] + "/" + single_file[0] + "';\n")             
 
 
 def write_folders(files, item, pattern):
