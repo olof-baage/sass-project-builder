@@ -71,24 +71,14 @@ class Project:
     def install_depencies(self):
         subprocess.check_call('npm install', shell=True)
 
-
-    def build_advanced_sass_architecture(self):
+    def build_sass_architecture(self):
         for item in sass_architecture:       
             files = item['files'] 
-            if has_folder_files(files):
-                os.mkdir("src/sass/" + item['folder'] + "/")     
-                for file in files:
-                    if(file[1]):
-                        fscss = open("src/sass/" + item['folder'] + "/" + file[0], "w")
-                        for folder in sass_architecture:
-                            all_files = folder['files']
-                            for single_file in all_files:
-                                if single_file[2]:
-                                    if len(single_file) == 4:                                  
-                                        fscss.write("@use '../" + folder['folder'] + "/" + single_file[0] +"' as " + single_file[3] + ";\n") 
-                                    else:
-                                        fscss.write("@use '../" + folder['folder'] + "/" + single_file[0] + ";\n")      
-                        fscss.close()  
+            if self.project_type == "advanced":
+                if has_folder_files(files):
+                    write_folders(files, item, self.project_type)
+            if self.project_type == "expert":
+                write_folders(files, item, self.project_type)   
 
 
 achitecture_options = ["easy", "advanced", "expert"]
@@ -191,7 +181,7 @@ sass_architecture = [
         ] 
     },
     { 
-        "folder": "layout",
+        "folder": "pages",
         "files" : [
             [ "_home.scss", False, False],
             [ "_contact.scss", False, False ]         
@@ -235,7 +225,7 @@ def main():
             sassproject.create_main_project_folders()
             sassproject.write_package_json()
             #sassproject.install_depencies()
-            sassproject.build_advanced_sass_architecture()
+            sassproject.build_sass_architecture()
 
 
 def validate_projectname(projectname):
@@ -258,7 +248,32 @@ def has_folder_files(files):
             count += 1
     if count >= 1:
         return True
-    return False 
+    return False   
+
+
+def write_file_dependencies(file):
+    for folder in sass_architecture:
+        all_files = folder['files']
+        for single_file in all_files:
+            if single_file[2]:
+                if len(single_file) == 4:                                  
+                    file.write("@use '../" + folder['folder'] + "/" + single_file[0] +"' as " + single_file[3] + ";\n") 
+                else:
+                    file.write("@use '../" + folder['folder'] + "/" + single_file[0] + ";\n") 
+
+
+def write_folders(files, item, pattern):
+    os.mkdir("src/sass/" + item['folder'] + "/")     
+    for file in files:
+        if pattern == "advanced":
+            if file[1]:
+                fscss = open("src/sass/" + item['folder'] + "/" + file[0], "w")
+                write_file_dependencies(fscss)
+                fscss.close()
+        elif pattern == "expert": 
+            fscss = open("src/sass/" + item['folder'] + "/" + file[0], "w")
+            write_file_dependencies(fscss)
+            fscss.close()            
 
 
 if __name__ == "__main__":
