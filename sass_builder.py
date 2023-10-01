@@ -41,15 +41,18 @@ class Project:
         if dir != None:
             if validate_path(dir):
                 self._project_dir = dir
-            else:
-                sys.exit("\n😱 Directory does not exist or can't be created.\nIf you want to create your project in a subfolder or in a folder outside of this, make sure, to provide a valid name.\nA folder name should only contain the chars A-Z, a-z, 0-9 and ._- and has to end with /.\ne.g. -dir ../afolder/asubfolder/ OR just-a-subfolder/\n")
+            elif validate_path == False:
+                sys.exit("\n😱 Project directory couldn't be created!\n\nIf there is already a folder with the same name, rename or delete that folder or chose another dir-name.\n\nIf you want to create your project in a subfolder or in a folder outside of this, make sure, to provide a valid name.\nA folder name should only contain the chars A-Z, a-z, 0-9 and ._- and has to end with /.\ne.g. -dir ../afolder/asubfolder/ OR just-a-subfolder/\n")
         else:
              self._project_dir = "./"    
 
 
     def create_main_project_folders(self):
         os.chdir(self.project_dir)
-        os.mkdir(self.project_name)
+        try:
+            os.mkdir(self.project_name)
+        except FileExistsError:
+            sys.exit("\n😱 Project directory couldn't be created!\n\nIf there is already a folder with the same name, rename or delete that folder or chose another dir-name.\n\nIf you want to create your project in a subfolder or in a folder outside of this, make sure, to provide a valid name.\nA folder name should only contain the chars A-Z, a-z, 0-9 and ._- and has to end with /.\ne.g. -dir ../afolder/asubfolder/ OR just-a-subfolder/\n")            
         os.chdir(self.project_name + "/")        
         for folder in main_folders:
             os.mkdir(folder + "/")
@@ -229,16 +232,17 @@ def main():
 
 
 def validate_projectname(projectname):
-    if re.search(r"[a-zA-Z0-9-_\.]$", projectname):
+    if re.search(r"^[a-zA-Z0-9-_\.]*$", projectname):
         return True
+    else:
+        return False
 
 
 def validate_path(path):
-	if re.search(r"^(\.\./|\./)?([a-z-A-Z_\.0-9]*(/){1})*$", path):
-		if os.path.isdir("./" + path) == False:
-			os.mkdir("./" + path)
-		return True
-	return False
+    if re.search(r"^(((\.\/){1}(\.\.\/)*)|(\.\/){1}|(\.\.\/)*)[a-z-A-Z-_\.0-9]*(\/){1}$", path):
+        return True
+    else:
+        return False
 
 
 def has_folder_files(files):
