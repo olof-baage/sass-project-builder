@@ -79,7 +79,15 @@ class Project:
                 os.mkdir("src/sass/" + item['folder'] + "/")     
                 for file in files:
                     if(file[1]):
-                        fscss = open("src/sass/" + item['folder'] + "/" + file[0], "w")   
+                        fscss = open("src/sass/" + item['folder'] + "/" + file[0], "w")
+                        for folder in sass_architecture:
+                            all_files = folder['files']
+                            for single_file in all_files:
+                                if single_file[2]:
+                                    if len(single_file) == 4:                                  
+                                        fscss.write("@use '../" + folder['folder'] + "/" + single_file[0] +"' as " + single_file[3] + ";\n") 
+                                    else:
+                                        fscss.write("@use '../" + folder['folder'] + "/" + single_file[0] + ";\n")      
                         fscss.close()  
 
 
@@ -133,62 +141,74 @@ htmlindex = [
     '\t</html>'
 ]
 
+'''
+Sass Architecture
+[ 
+    "_variables.scss",  --> filename
+      True/False,       --> file is included in ADVANCED pattern
+      True/False        --> file needs to be includes in other files. important for vars (colors, typography...), mixins
+      "var"             --> namespace (optional)
+]
+- Won't be used for projects with pattern EASY
+- Includes all folders with files (set to true) with at least one file set to true with pattern ADVANCED 
+- Includes all folders and its files with pattern EXPERT 
+'''
 sass_architecture = [ 
     { 
         "folder": "abstracts",
         "files" : [
-            [ "_variables.scss", True ],
-            [ "_functions.scss", False ],
-            [ "_mixins.scss", True ],
-            [ "_placeholders.scss", False ]            
+            [ "_variables.scss", True, True, "var" ],
+            [ "_functions.scss", False, True, "func" ],
+            [ "_mixins.scss", True, True, "mix" ],
+            [ "_placeholders.scss", False, True, "plc" ]            
         ] 
     },
     { 
         "folder": "base",
         "files" : [
-            [ "_reset.scss", True ],
-            [ "_typography.scss", True ]         
+            [ "_reset.scss", True, True ],
+            [ "_typography.scss", True, False ]         
         ] 
     },
     { 
         "folder": "components",
         "files" : [
-            [ "_buttons.scss", True ],
-            [ "_carousel.scss", False ],
-            [ "_cover.scss", False ],
-            [ "_dropdown.scss", False ]          
+            [ "_buttons.scss", True, False ],
+            [ "_carousel.scss", False, False ],
+            [ "_cover.scss", False, False ],
+            [ "_dropdown.scss", False, False ]          
         ] 
     },
     { 
         "folder": "layout",
         "files" : [
-            [ "_navigation.scss", True ],
-            [ "_grid.scss", True ],
-            [ "_header.scss", True ],
-            [ "_footer.scss", True ],
-            [ "_sidebar.scss", True ],
-            [ "_forms.scss", True ]          
+            [ "_navigation.scss", True, False ],
+            [ "_grid.scss", True, False ],
+            [ "_header.scss", True, False ],
+            [ "_footer.scss", True, False ],
+            [ "_sidebar.scss", True, False ],
+            [ "_forms.scss", True, False ]          
         ] 
     },
     { 
         "folder": "layout",
         "files" : [
-            [ "_home.scss", False ],
-            [ "_contact.scss", False ]         
+            [ "_home.scss", False, False],
+            [ "_contact.scss", False, False ]         
         ] 
     },
     { 
         "folder": "themes",
         "files" : [
-            [ "_theme.scss", False ],
-            [ "_admin.scss", False ]         
+            [ "_theme.scss", False, False ],
+            [ "_admin.scss", False, False ]         
         ] 
     },
     { 
         "folder": "vendors",
         "files" : [
-            [ "_bootstrap.scss", False ],
-            [ "_jquery-ui.scss", False ]         
+            [ "_bootstrap.scss", False, False ],
+            [ "_jquery-ui.scss", False, False ]         
         ] 
     }    
 ]
@@ -214,7 +234,7 @@ def main():
             sassproject.save_settings(args.project, args.pattern, args.dir)
             sassproject.create_main_project_folders()
             sassproject.write_package_json()
-            sassproject.install_depencies()
+            #sassproject.install_depencies()
             sassproject.build_advanced_sass_architecture()
 
 
