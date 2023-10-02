@@ -270,5 +270,9 @@ package_json = [
 ]
 ```
 
-All the dependencies are currentyl (October 2023) up to date.
-After installing all npm packages there should be no error.
+All the dependencies are currently (October 2023) up to date.
+There should be no error after the Sass Project Builder ran 'npm install'.
+
+## Support
+
+Please open an [issue](https://github.com/code-by-olof/sass-project-builder/issues/new) for support.
