@@ -81,9 +81,9 @@ class Project:
             files = item['files'] 
             if self.project_type == "advanced":
                 if has_folder_true_files(files):
-                    write_folders(files, item, self.project_type)
+                    write_folders(files, item, self.project_type, item['folder'])
             if self.project_type == "expert":
-                write_folders(files, item, self.project_type) 
+                write_folders(files, item, self.project_type, item['folder']) 
 
 
     def imports_in_main_scsss_files(self):
@@ -92,7 +92,10 @@ class Project:
                 files = folder['files']
                 for single_file in files:
                     with open("src/sass/style.scss", "a") as scss:
-                        scss.write("@use '" + folder['folder'] + "/" + single_file[0] + "';\n")
+                        if self.project_type == "advanced" and single_file[1]:
+                            scss.write("@use '" + folder['folder'] + "/" + single_file[0] + "';\n")
+                        if self.project_type == "expert":
+                            scss.write("@use '" + folder['folder'] + "/" + single_file[0] + "';\n")
                 with open("src/sass/style.scss", "a") as scss:
                     scss.write("\n")                          
 
@@ -221,9 +224,7 @@ sass_architecture = [
 ]
 
 def main():
-    '''
-    Settings for CLI parser
-    '''
+    # settings for argparse
     parser = argparse.ArgumentParser(prog='SassProjectBuilder', description='Sass project Builder')
     parser.usage = "\n\nSTART A PROJECT:\nsass -project projectname -pattern easy | advanced | expert"
     parser.add_argument("-project", help="projectname e.g. LinkedIn-Clone")
@@ -231,11 +232,15 @@ def main():
     parser.add_argument("-pattern", help="your architecture pattern for sass", choices=achitecture_options)
     args = parser.parse_args()
 
+    # new project obj
     sassproject = Project()
 
+    # close the program and show the help if there are 0 args besides the filename
     if len(sys.argv) == 1:
         parser.print_help()       
 
+    
+    # start creating the more complex sass architecture
     if args.project != None and args.pattern != None:
         if validate_projectname(args.project):
             sassproject.save_settings(args.project, args.pattern, args.dir)
@@ -246,6 +251,7 @@ def main():
             sassproject.imports_in_main_scsss_files()
 
 
+# checks the project name 
 def validate_projectname(projectname):
     if re.search(r"^[a-zA-Z0-9-_\.]*$", projectname):
         return True
@@ -253,6 +259,7 @@ def validate_projectname(projectname):
         return False
 
 
+# make sure the user only uses valid folder names
 def validate_path(path):
     if re.search(r"^(((\.\/){1}(\.\.\/)*)|(\.\/){1}|(\.\.\/)*)[a-z-A-Z-_\.0-9]*(\/){1}$", path):
         return True
@@ -260,9 +267,13 @@ def validate_path(path):
         return False
 
 
+# return true when folder has at least
+# 1 file that needs to be imported (@use)
 def has_folder_true_files(files):
     count = 0
     for file in files:
+        # file needs to be imported -> 2. value is true
+        # e.g. [ "variables", True, True, "var" ]
         if(file[1]):
             count += 1
     if count >= 1:
@@ -270,30 +281,49 @@ def has_folder_true_files(files):
     return False   
 
 
-def write_file_dependencies(file, openFile):
+def write_file_dependencies(file, openFile, folderPointer, pattern):
     for folder in sass_architecture:
         all_files = folder['files']
         for single_file in all_files:
-            if single_file[2]:
-                if len(single_file) == 4:  
-                    if openFile != single_file[0] and single_file[1]:
+            # file has a dependency
+            if single_file[2] and pattern == "advanced":
+                # fileneme is different from open file
+                # file belongs to advanced pattern
+                # file is not in the same folder than other file with a dependeny (stak overflow!)
+                if openFile != single_file[0] and single_file[1] and folderPointer != folder['folder']:
+                    # file has namespace
+                    if len(single_file) == 4: 
                         file.write("@use '../" + folder['folder'] + "/" + single_file[0] +"' as " + single_file[3] + ";\n") 
-                else:
-                    if openFile != single_file[0]:
-                        file.write("@use '../" + folder['folder'] + "/" + single_file[0] + "';\n")             
+                    # file has no namespace
+                    else:
+                        file.write("@use '../" + folder['folder'] + "/" + single_file[0] + "';\n")  
+            elif single_file[2] and pattern == "expert":
+                # fileneme is different from open file
+                # file is not in the same folder than other file with a dependeny (stak overflow!)
+                if openFile != single_file[0] and folderPointer != folder['folder']:
+                    # file has namespace
+                    if len(single_file) == 4: 
+                        file.write("@use '../" + folder['folder'] + "/" + single_file[0] +"' as " + single_file[3] + ";\n") 
+                    # file has no namespace
+                    else:
+                        file.write("@use '../" + folder['folder'] + "/" + single_file[0] + "';\n")                 
 
 
-def write_folders(files, item, pattern):
+
+def write_folders(files, item, pattern, openFolder):
+    # create main folder
     os.mkdir("src/sass/" + item['folder'] + "/")     
     for file in files:
-        if pattern == "advanced":
-            if file[1]:
-                fscss = open("src/sass/" + item['folder'] + "/_" + file[0] + ".scss", "w")
-                write_file_dependencies(fscss, file[0])
-                fscss.close()
+        # file belongs to advanced-pattern
+        if pattern == "advanced" and file[1]:
+            fscss = open("src/sass/" + item['folder'] + "/_" + file[0] + ".scss", "w")
+            # write the imports (@use) in the file
+            write_file_dependencies(fscss, file[0], openFolder, pattern)
+            fscss.close()
         elif pattern == "expert": 
             fscss = open("src/sass/" + item['folder'] + "/_" + file[0] + ".scss", "w")
-            write_file_dependencies(fscss, file[0])
+             # write the imports (@use) in the file
+            write_file_dependencies(fscss, file[0], openFolder, pattern)
             fscss.close()            
 
 
