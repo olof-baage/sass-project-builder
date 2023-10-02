@@ -210,8 +210,9 @@ sass_architecture = [
     { 
         "folder": "themes",
         "files" : [
-            [ "theme", False, False ],
-            [ "admin", False, False ]         
+            [ "light", False, False ],
+            [ "dark", False, False ],
+            [ "admin", False, False ]          
         ] 
     },
     { 

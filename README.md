@@ -82,3 +82,73 @@ The following project structure (based on the default settings) will be created:
   - package-lock.json
   - package.json
 ```
+
+
+### Set up a project with expert strcture
+
+The expert structure includes all folders and files of the 7-1-architecture pattern.
+You also can adjust the names of the files and folders in the Python file.
+
+```
+python3 sass_builder.py -project projectname -pattern expert
+```
+The following project structure (based on the default settings) will be created:
+
+
+```
+- PROJECTNAME
+  - build
+  - public
+  - node_modules
+    - ...
+  - src
+      - index.html
+      - sass
+         - abstracts
+            - _mixsins.scss
+            - _variables.scss
+            - _functions.scss
+            - _placeholders.scss
+         - base
+            - _reset.scss
+            - _typography.scss
+         - components
+            - _buttons.scss 
+            - _carousel.scss 
+            - _cover.scss 
+            - _dropdon.scss 
+         - layout
+            - _footer.scss 
+            - _forms.scss 
+            - _grid.scss 
+            - _header.scss 
+            - _footer.scss 
+            - _navigation.scss
+            - _sidebar.scss  
+         - pages
+            - _home.scss
+            - _contact.scss
+         - themes
+            - _light.scss
+            - _dark.scss 
+            - _admin.scss
+         - themes
+            - _bootstrap.scss
+            - _jquery-ui.scss                                                                             
+         - style.scss
+  - package-lock.json
+  - package.json
+```
+
+
+### Start coding in your project
+
+After creating the project with easy, advanced or expert pattern, navigate into your direcectory and start sass.
+
+```
+cd projectname
+```
+
+```
+npm start
+```
