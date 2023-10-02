@@ -228,3 +228,47 @@ Let's take a closer look:
 2. Value: True/False --> File is/is not included in Advanced Pattern
 3. Value: True/False -> File should be imported (@use) in other files. Should only be set true in files such as variables, functions...
 4. Value: namespace - optional - can be provided if it is a file that needs to be imported. 3. value musst be set to true then.
+
+If you change the names settings (2 - 4), it effects the usage for projects with advanced pattern. The expert pattern will always include all foldern and files.
+You can change the names of the files and folders and of course, you can add or remove files and folders.
+
+
+## Package.json
+
+The Python file has an array with the name package_json.
+```
+package_json = [
+     '{',
+     '\t"name": "project",',
+     '\t"version": "0.1.0",',
+     '\t"description": "created by Sass Project Builder",',
+     '\t"main": "public/index.html",',
+     '\t"author": "code-by-olof",',
+     '\t"scripts": {',
+     '\t\t"build:sass": "sass  --no-source-map src/sass:public/",',
+     '\t\t"copy:html": "copyfiles -u 1 ./src/*.html public",',
+     '\t\t"copy": "npm-run-all --parallel copy:*",',
+     '\t\t"watch:html": "onchange \'src/*.html\' -- npm run copy:html",',
+     '\t\t"watch:sass": "sass  --no-source-map --watch src/sass:public/",',
+     '\t\t"watch": "npm-run-all --parallel watch:*",',
+     '\t\t"serve": "browser-sync start --server public --files public",',
+     '\t\t"start": "npm-run-all copy --parallel watch serve",',
+     '\t\t"build": "npm-run-all copy:html build:*",',
+     '\t\t"postbuild": "postcss public/css/*.css -u autoprefixer cssnano -r --no-map"',
+     '\t},',
+     '\t"dependencies": {',
+     '\t\t"autoprefixer": "^10.4.16",',
+     '\t\t"browser-sync": "^2.29.3",',
+     '\t\t"copyfiles": "^2.4.1",',
+     '\t\t"cssnano": "^6.0.1",',
+     '\t\t"npm-run-all": "^4.1.5",',
+     '\t\t"onchange": "^7.1.0",',
+     '\t\t"postcss-cli": "^10.1.0",',
+     '\t\t"sass": "^1.68.0"',
+     '\t}',
+     '}'
+]
+```
+
+All the dependencies are currentyl (October 2023) up to date.
+After installing all npm packages there should be no error.

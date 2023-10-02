@@ -151,18 +151,7 @@ htmlindex = [
     '\t</html>'
 ]
 
-'''
-Sass Architecture
-[ 
-    "_variables.scss",  --> filename
-      True/False,       --> file is included in ADVANCED pattern
-      True/False        --> file needs to be includes in other files. important for vars (colors, typography...), mixins
-      "var"             --> namespace (optional)
-]
-- Won't be used for projects with pattern EASY
-- Includes all folders with files (set to true) with at least one file set to true with pattern ADVANCED 
-- Includes all folders and its files with pattern EXPERT 
-'''
+# Sass 7-1-Pattern
 sass_architecture = [ 
     { 
         "folder": "abstracts",
