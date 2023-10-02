@@ -8,11 +8,20 @@ Download the Sass Project Builder files or install them via git clone:
 https://github.com/code-by-olof/sass-project-builder.git
 ```
 
-ou may have to install the following python libaries.
+You may have to install the following python libaries.
 
 ### Argsparse
 ```
 python3 -m pip install argparse
+```
+
+## Create a project
+Here is a short introduction how to create a project. Read the full documentation to learn more about the details and how you can adjust this tool to your specific needs.
+
+```
+python3 sass_builder.py -project projectname -pattern (easy OR advanced OR expert)
+cd projectname/
+npm start
 ```
 
 ## Usage
