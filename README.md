@@ -152,3 +152,79 @@ cd projectname
 ```
 npm start
 ```
+
+## Adjust the default settings
+
+In the Python file (sass_builder.py) there is an array of objects called sass_architecture.
+
+```
+sass_architecture = [ 
+    { 
+        "folder": "abstracts",
+        "files" : [
+            [ "variables", True, True, "var" ],
+            [ "functions", False, True, "func" ],
+            [ "mixins", True, True, "mix" ],
+            [ "placeholders", False, True, "plc" ]            
+        ] 
+    },
+    { 
+        "folder": "base",
+        "files" : [
+            [ "reset", True, False ],
+            [ "typography", True, False ]         
+        ] 
+    },
+    { 
+        "folder": "components",
+        "files" : [
+            [ "buttons", True, False ],
+            [ "carousel", False, False ],
+            [ "cover", False, False ],
+            [ "dropdown", False, False ]          
+        ] 
+    },
+    { 
+        "folder": "layout",
+        "files" : [
+            [ "navigation", True, False ],
+            [ "grid", True, False ],
+            [ "header", True, False ],
+            [ "footer", True, False ],
+            [ "sidebar", True, False ],
+            [ "forms", True, False ]          
+        ] 
+    },
+    { 
+        "folder": "pages",
+        "files" : [
+            [ "home", False, False],
+            [ "contact", False, False ]         
+        ] 
+    },
+    { 
+        "folder": "themes",
+        "files" : [
+            [ "light", False, False ],
+            [ "dark", False, False ],
+            [ "admin", False, False ]          
+        ] 
+    },
+    { 
+        "folder": "vendors",
+        "files" : [
+            [ "bootstrap", False, False ],
+            [ "jquery-ui", False, False ]         
+        ] 
+    }    
+]
+```
+
+Let's take a closer look:
+```
+[ "variables", True, True, "var" ]
+```
+1. Value: name of the .scss-file
+2. Value: True/False --> File is/is not included in Advanced Pattern
+3. Value: True/False -> File should be imported (@use) in other files. Should only be set true in files such as variables, functions...
+4. Value: namespace - optional - can be provided if it is a file that needs to be imported. 3. value musst be set to true then.
