@@ -124,13 +124,13 @@ package_json = [
      '\t},',
      '\t"dependencies": {',
      '\t\t"autoprefixer": "^10.4.16",',
-     '\t\t"browser-sync": "^2.29.3",',
+     '\t\t"browser-sync": "^3.0.2",',
      '\t\t"copyfiles": "^2.4.1",',
-     '\t\t"cssnano": "^6.0.1",',
+     '\t\t"cssnano": "^6.0.3",',
      '\t\t"npm-run-all": "^4.1.5",',
      '\t\t"onchange": "^7.1.0",',
-     '\t\t"postcss-cli": "^10.1.0",',
-     '\t\t"sass": "^1.68.0"',
+     '\t\t"postcss-cli": "^11.0.0",',
+     '\t\t"sass": "^1.69.7"',
      '\t}',
      '}'
 ]
