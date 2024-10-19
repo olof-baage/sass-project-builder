@@ -109,7 +109,7 @@ package_json = [
      '\t"version": "0.1.0",',
      '\t"description": "created by Sass Project Builder",',
      '\t"main": "public/index.html",',
-     '\t"author": "code-by-olof",',
+     '\t"author": "Olof Baage",',
      '\t"scripts": {',
      '\t\t"build:sass": "sass  --no-source-map src/sass:public/",',
      '\t\t"copy:html": "copyfiles -u 1 ./src/*.html public",',

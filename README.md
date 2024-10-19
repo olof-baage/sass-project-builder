@@ -5,7 +5,7 @@ The Sass Project Builder is a command line tool build in Python. It sets up a pr
 
 Download the Sass Project Builder files or install them via git clone:
 ```
-https://github.com/code-by-olof/sass-project-builder.git
+https://github.com/olof-baage/sass-project-builder.git
 ```
 
 You may have to install the following python libaries.
