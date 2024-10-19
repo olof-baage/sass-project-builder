@@ -126,7 +126,7 @@ package_json = [
      '\t\t"autoprefixer": "^10.4.16",',
      '\t\t"browser-sync": "^3.0.2",',
      '\t\t"copyfiles": "^2.4.1",',
-     '\t\t"cssnano": "^6.0.3",',
+     '\t\t"cssnano": "^7.0.6",',
      '\t\t"npm-run-all": "^4.1.5",',
      '\t\t"onchange": "^7.1.0",',
      '\t\t"postcss-cli": "^11.0.0",',
